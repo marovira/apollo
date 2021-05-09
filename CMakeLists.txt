@@ -129,31 +129,31 @@ set_target_properties(apollo_core PROPERTIES FOLDER "apollo")
 #================================
 # Build the tests.
 #================================
-#if (APOLLO_BUILD_TESTS)
-    #FetchContent_Declare(
-        #catch2
-        #GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        #GIT_TAG 5c88067bd339465513af4aec606bd2292f1b594a
-        #)
+if (APOLLO_BUILD_TESTS)
+    FetchContent_Declare(
+        catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG 5c88067bd339465513af4aec606bd2292f1b594a
+        )
 
-    #find_package(Catch2 QUIET)
-    #if (NOT Catch2_FOUND AND NOT catch2_POPULATED)
-        #FetchContent_Populate(catch2)
-        #add_subdirectory(${catch2_SOURCE_DIR} ${catch2_BINARY_DIR})
-        #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${catch2_SOURCE_DIR}/contrib)
-    #endif()
+    find_package(Catch2 QUIET)
+    if (NOT Catch2_FOUND AND NOT catch2_POPULATED)
+        FetchContent_Populate(catch2)
+        add_subdirectory(${catch2_SOURCE_DIR} ${catch2_BINARY_DIR})
+        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${catch2_SOURCE_DIR}/contrib)
+    endif()
 
-    #add_subdirectory(${APOLLO_TEST_ROOT})
+    add_subdirectory(${APOLLO_TEST_ROOT})
 
-    #source_group("source" FILES ${APOLLO_TEST_TOP_GROUP})
-    #source_group("source\\core" FILES ${APOLLO_TEST_CORE_GROUP})
-    #add_executable(apollo_test ${APOLLO_TEST_LIST})
-    #target_link_libraries(apollo_test
-        #apollo_core
-        #Catch2::Catch2)
-    #set_target_properties(apollo_test PROPERTIES FOLDER "apollo")
+    source_group("source" FILES ${APOLLO_TEST_TOP_GROUP})
+    source_group("source\\core" FILES ${APOLLO_TEST_CORE_GROUP})
+    add_executable(apollo_test ${APOLLO_TEST_LIST})
+    target_link_libraries(apollo_test
+        apollo_core
+        Catch2::Catch2)
+    set_target_properties(apollo_test PROPERTIES FOLDER "apollo")
 
-    #include(CTest)
-    #include(Catch)
-    #catch_discover_tests(apollo_test)
-#endif()
+    include(CTest)
+    include(Catch)
+    catch_discover_tests(apollo_test)
+endif()
