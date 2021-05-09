@@ -11,7 +11,7 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Define version variables.
-set(APOLLO_VERSION_MAJOR "1")
+set(APOLLO_VERSION_MAJOR "0")
 set(APOLLO_VERSION_MINOR "0")
 set(APOLLO_VERSION_PATCH "0")
 set(APOLLO_VERSION_EXTRA "")
@@ -68,23 +68,27 @@ FetchContent_Declare(
     GIT_TAG 531afeb2f6c7ac2a7c4057c3d7278868324cc584
     )
 
-FetchContent_Declare(
-    tbb
-    GIT_REPOSITORY https://github.com/oneapi-src/oneTBB
-    GIT_TAG 2dba2072869a189b9fdab3ffa431d3ea49059a19
-    )
-
 find_package(zeus QUIET)
-find_package(tbb QUIET)
 
 if (NOT zeus_FOUND AND NOT zeus_POPULATED)
     FetchContent_Populate(zeus)
     add_subdirectory(${zeus_SOURCE_DIR} ${zeus_BINARY_DIR})
 endif()
 
-if (NOT tbb_FOUND AND NOT tbb_POPULATED)
-    FetchContent_Populate(tbb)
-    add_subdirectory(${tbb_SOURCE_DIR} ${tbb_BINARY_DIR})
+if (APOLLO_BUILD_PARALLEL)
+    FetchContent_Declare(
+        tbb
+        GIT_REPOSITORY https://github.com/oneapi-src/oneTBB
+        GIT_TAG 2dba2072869a189b9fdab3ffa431d3ea49059a19
+        )
+
+    find_package(tbb QUIET)
+
+
+    if (NOT tbb_FOUND AND NOT tbb_POPULATED)
+        FetchContent_Populate(tbb)
+        add_subdirectory(${tbb_SOURCE_DIR} ${tbb_BINARY_DIR})
+    endif()
 endif()
 
 #================================
