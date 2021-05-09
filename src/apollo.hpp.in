@@ -1,0 +1,12 @@
+#pragma once
+
+#include <string_view>
+
+namespace apollo
+{
+    static constexpr auto apollo_version_major{@APOLLO_VERSION_MAJOR@};
+    static constexpr auto apollo_version_minor{@APOLLO_VERSION_MINOR@};
+    static constexpr auto apollo_version_patch{@APOLLO_VERSION_PATCH@};
+
+    static constexpr std::string_view apollo_version_string{"@APOLLO_VERSION_MAJOR@.@APOLLO_VERSION_MINOR@.@APOLLO_VERSION_PATCH@"};
+}
