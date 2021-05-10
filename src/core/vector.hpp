@@ -42,7 +42,7 @@ namespace core
 #endif
         }
 
-        explicit Vector(Vector<T, N - 1> const& vec)
+        explicit Vector(Vector<T, N - 1> const& vec) : Vector{}
         {
             std::copy(vec.data.begin(), vec.data.end(), data.begin());
 
@@ -200,14 +200,7 @@ namespace core
     template<typename T, std::size_t N>
     auto length(Vector<T, N> const& vec)
     {
-        if (std::is_floating_point<T>::value)
-        {
-            return static_cast<T>(std::sqrt(dot(vec, vec)));
-        }
-        else
-        {
-            return std::sqrt(dot(vec, vec));
-        }
+        return static_cast<T>(std::sqrt(dot(vec, vec)));
     }
 
     template<typename T, std::size_t N>
@@ -245,8 +238,8 @@ namespace core
     template<typename T, std::size_t N>
     Vector<T, N> operator/(Vector<T, N> const& lhs, T rhs)
     {
-        Vector<T, N> out{rhs};
-        out /= lhs;
+        Vector<T, N> out{lhs};
+        out /= rhs;
         return out;
     }
 
@@ -346,12 +339,12 @@ namespace core
         Vector<T, N> v2{}, v3{};
         if (std::abs(v1[0]) > std::abs(v1[1]))
         {
-            v2 = Vector<T, N>{-v1[2], 0, v1[0]} /
+            v2 = Vector<T, N>{-v1[2], T{0}, v1[0]} /
                  static_cast<T>(std::sqrt(v1[0] * v1[0] + v1[2] * v1[2]));
         }
         else
         {
-            v2 = Vector<T, N>{0, v1[2], -v1[1]} /
+            v2 = Vector<T, N>{T{0}, v1[2], -v1[1]} /
                  static_cast<T>(std::sqrt(v1[1] * v1[1] + v1[2] * v1[2]));
         }
 
@@ -383,18 +376,19 @@ namespace core
         return os;
     }
 
+#if !defined(APOLLO_DISABLE_VECTOR_TEMPLATE_SPECIALISATIONS)
     // Disable warnings about anonymous structs.
-#if defined(ZEUS_COMPILER_MSVC)
-#    pragma warning(push)
-#    pragma warning(disable : 4201)
-#elif defined(ZEUS_COMPILER_CLANG)
-#    pragma clang diagnostic push
-#    pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
-#    pragma clang diagnostic ignored "-Wnested-anon-types"
-#elif defined(ZEUS_COMPILER_GCC)
-#    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wpedantic"
-#endif
+#    if defined(ZEUS_COMPILER_MSVC)
+#        pragma warning(push)
+#        pragma warning(disable : 4201)
+#    elif defined(ZEUS_COMPILER_CLANG)
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
+#        pragma clang diagnostic ignored "-Wnested-anon-types"
+#    elif defined(ZEUS_COMPILER_GCC)
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wpedantic"
+#    endif
 
     // Useful specializations.
     template<typename T>
@@ -413,12 +407,6 @@ namespace core
         }
 
         explicit Vector(T a_x, T a_y) : x{a_x}, y{a_y}
-        {
-            ASSERT(!has_nans(*this));
-        }
-
-        explicit Vector(Vector<T, 3> const& vec) :
-            x{vec.data[0]}, y{vec.data[1]}
         {
             ASSERT(!has_nans(*this));
         }
@@ -465,18 +453,6 @@ namespace core
             ASSERT(!has_nans(*this));
         }
 
-        explicit Vector(Vector<T, 2> const& vec) :
-            x{vec.data[0]}, y{vec.data[1]}, z{0}
-        {
-            ASSERT(!has_nans(*this));
-        }
-
-        explicit Vector(Vector<T, 4> const& vec) :
-            x{vec.data[0]}, y{vec.data[1]}, z{vec.data[2]}
-        {
-            ASSERT(!has_nans(*this));
-        }
-
         T& operator[](std::size_t i)
         {
             ASSERT_MSG(i < dimension, "invalid index");
@@ -519,12 +495,6 @@ namespace core
             ASSERT(!has_nans(*this));
         }
 
-        explicit Vector(Vector<T, 3> const& vec) :
-            x{vec.data[0]}, y{vec.data[1]}, z{vec.data[2]}, w{0}
-        {
-            ASSERT(!has_nans(*this));
-        }
-
         T& operator[](std::size_t i)
         {
             ASSERT_MSG(i < dimension, "invalid index");
@@ -547,12 +517,54 @@ namespace core
         };
     };
 
-#if defined(ZEUS_COMPILER_MSVC)
-#    pragma warning(pop)
-#elif defined(ZEUS_COMPILER_CLANG)
-#    pragma clang diagnostic pop
-#elif defined(ZEUS_COMPILER_GCC)
-#    pragma GCC diagnostic pop
+#    if defined(ZEUS_COMPILER_MSVC)
+#        pragma warning(pop)
+#    elif defined(ZEUS_COMPILER_CLANG)
+#        pragma clang diagnostic pop
+#    elif defined(ZEUS_COMPILER_GCC)
+#        pragma GCC diagnostic pop
+#    endif
 #endif
 
+    template<typename T>
+    using Vector2  = Vector<T, 2>;
+    using Vector2f = Vector2<float>;
+    using Vector2d = Vector2<double>;
+    using Vector2i = Vector2<int>;
+
+    template<typename T>
+    using Vector3  = Vector<T, 3>;
+    using Vector3f = Vector3<float>;
+    using Vector3d = Vector3<double>;
+    using Vector3i = Vector3<int>;
+
+    template<typename T>
+    using Vector4  = Vector<T, 4>;
+    using Vector4f = Vector4<float>;
+    using Vector4d = Vector4<double>;
+    using Vector4i = Vector4<int>;
+
+    template<typename T>
+    using Point2  = Point<T, 2>;
+    using Point2f = Point2<float>;
+    using Point2d = Point2<double>;
+    using Point2i = Point2<int>;
+
+    template<typename T>
+    using Point3  = Point<T, 3>;
+    using Point3f = Point3<float>;
+    using Point3d = Point3<double>;
+    using Point3i = Point3<int>;
+
+    template<typename T>
+    using Point4  = Point<T, 4>;
+    using Point4f = Point4<float>;
+    using Point4d = Point4<double>;
+    using Point4i = Point4<int>;
+
+    template<typename T>
+    using Normal3  = Normal<T, 3>;
+    using Normal3f = Normal3<float>;
+    using Normal3d = Normal3<double>;
+    using Normal3i = Normal3<int>;
 } // namespace core
