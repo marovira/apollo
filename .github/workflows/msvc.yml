@@ -46,7 +46,7 @@ jobs:
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |
-          cmake --build . --config %BUILD_TYPE%
+          cmake --build . --config $BUILD_TYPE
 
       - name: Test
         shell: powershell
@@ -54,4 +54,4 @@ jobs:
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |
-          cmake --build . --target RUN_TESTS --config %BUILD_TYPE%
+          cmake --build . --target RUN_TESTS --config $BUILD_TYPE
