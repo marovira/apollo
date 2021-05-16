@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup
-        shell: ps
+        shell: powershell
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |
@@ -41,14 +41,16 @@ jobs:
           cmake -G "Visual Studio 16 2019" .. -DBUILD_SHARED_LIBS=OFF
 
       - name: Build
-        shell: ps
+        shell: powershell
+        working-directory: ./build
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |
           cmake --build . --config %BUILD_TYPE%
 
       - name: Test
-        shell: ps
+        shell: powershell
+        working-directory: ./build
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |

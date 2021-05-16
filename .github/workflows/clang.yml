@@ -39,11 +39,13 @@ jobs:
 
       - name: Build
         shell: bash
+        working-directory: ./build
         run: |
           make
 
       - name: Test
         shell: bash
+        working-directory: ./build
         run: |
           make test
 
