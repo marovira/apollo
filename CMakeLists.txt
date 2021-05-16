@@ -28,6 +28,14 @@ endif()
 #================================
 option(APOLLO_BUILD_TESTS "Build Apollo unit tests" ON)
 option(APOLLO_BUILD_PARALLEL "Build parallel version with TBB" OFF)
+set(APOLLO_REAL_TYPE "float" CACHE STRING "Real type used by Apollo")
+set_property(CACHE APOLLO_REAL_TYPE PROPERTY STRINGS "float" "double")
+
+# Validate the option from the user.
+get_property(TYPE_STRINGS CACHE APOLLO_REAL_TYPE PROPERTY STRINGS)
+if (NOT APOLLO_REAL_TYPE IN_LIST TYPE_STRINGS)
+    message(FATAL_ERROR "Invalid real type")
+endif()
 
 # Make sure Zeus does not make the clang-format target and disable the
 # unit tests for it.
@@ -112,6 +120,14 @@ endif()
 if (APOLLO_BUILD_PARALLEL)
     set(APOLLO_COMPILE_DEFINITIONS ${APOLLO_COMPILE_DEFINITIONS}
         -DAPOLLO_BUILD_PARALLEL)
+endif()
+
+if (APOLLO_REAL_TYPE STREQUAL "float")
+    set(APOLLO_COMPILE_DEFINITIONS ${APOLLO_COMPILE_DEFINITIONS}
+        -DAPOLLO_USE_FLOAT)
+elseif(APOLLO_REAL_TYPE STREQUAL "double")
+    set(APOLLO_COMPILE_DEFINITIONS ${APOLLO_COMPILE_DEFINITIONS}
+        -DAPOLLO_USE_DOUBLE)
 endif()
 
 #================================
