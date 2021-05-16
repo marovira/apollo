@@ -4,8 +4,9 @@
 
 [![Generic badge](https://img.shields.io/badge/License-BSD3-blue)](LICENSE)
 [![Generic badge](https://img.shields.io/badge/Language-C++17-red.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
-[![Build status](https://ci.appveyor.com/api/projects/status/u32mb711m11v749w?svg=true)](https://ci.appveyor.com/project/marovira/apollo-52qan)
-[![Build Status](https://travis-ci.org/marovira/apollo.svg?branch=master)](https://travis-ci.org/marovira/apollo)
+[![Clang](https://github.com/marovira/apollo/actions/workflows/clang.yml/badge.svg)](https://github.com/marovira/apollo/actions/workflows/clang.yml)
+[![GCC](https://github.com/marovira/apollo/actions/workflows/gcc.yml/badge.svg)](https://github.com/marovira/apollo/actions/workflows/gcc.yml)
+[![MSVC](https://github.com/marovira/apollo/actions/workflows/msvc.yml/badge.svg)](https://github.com/marovira/apollo/actions/workflows/msvc.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/marovira/apollo/badge)](https://www.codefactor.io/repository/github/marovira/apollo)
 
 
