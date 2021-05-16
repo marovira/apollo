@@ -29,12 +29,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build
-      - shell: bash
+      - name: Setup
+        shell: bash
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |
           mkdir build && cd build
           cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+
+      - name: Build
+        shell: bash
+        run: |
           make
+
+      - name: Test
+        shell: bash
+        run: |
           make test
+
+
