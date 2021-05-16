@@ -43,10 +43,11 @@ jobs:
             cxx: "clang++"
           }
     steps:
+      - uses: actions/checkout@v2
+
       - name: Build
-        uses: actions/checkout@v2
         env:
-        BUILD_TYPE: ${{ matrix.config.build_type }}
+          BUILD_TYPE: ${{ matrix.config.build_type }}
         run: |
           mkdir build && cd build
           cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
