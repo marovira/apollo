@@ -1,5 +1,6 @@
 #pragma once
 
+#include "real.hpp"
 #include "utils.hpp"
 
 #include <algorithm>
@@ -527,44 +528,19 @@ namespace core
 #endif
 
     template<typename T>
-    using Vector2  = Vector<T, 2>;
-    using Vector2f = Vector2<float>;
-    using Vector2d = Vector2<double>;
-    using Vector2i = Vector2<int>;
+    using Vector2 = Vector<T, 2>;
+    template<typename T>
+    using Vector3 = Vector<T, 3>;
+    template<typename T>
+    using Vector4 = Vector<T, 4>;
 
     template<typename T>
-    using Vector3  = Vector<T, 3>;
-    using Vector3f = Vector3<float>;
-    using Vector3d = Vector3<double>;
-    using Vector3i = Vector3<int>;
+    using Point2 = Point<T, 2>;
+    template<typename T>
+    using Point3 = Point<T, 3>;
+    template<typename T>
+    using Point4 = Point<T, 4>;
 
     template<typename T>
-    using Vector4  = Vector<T, 4>;
-    using Vector4f = Vector4<float>;
-    using Vector4d = Vector4<double>;
-    using Vector4i = Vector4<int>;
-
-    template<typename T>
-    using Point2  = Point<T, 2>;
-    using Point2f = Point2<float>;
-    using Point2d = Point2<double>;
-    using Point2i = Point2<int>;
-
-    template<typename T>
-    using Point3  = Point<T, 3>;
-    using Point3f = Point3<float>;
-    using Point3d = Point3<double>;
-    using Point3i = Point3<int>;
-
-    template<typename T>
-    using Point4  = Point<T, 4>;
-    using Point4f = Point4<float>;
-    using Point4d = Point4<double>;
-    using Point4i = Point4<int>;
-
-    template<typename T>
-    using Normal3  = Normal<T, 3>;
-    using Normal3f = Normal3<float>;
-    using Normal3d = Normal3<double>;
-    using Normal3i = Normal3<int>;
+    using Normal3 = Normal<T, 3>;
 } // namespace core
