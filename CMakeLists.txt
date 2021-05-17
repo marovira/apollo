@@ -70,7 +70,7 @@ source_group("source\\core" FILES ${APOLLO_SOURCE_CORE_GROUP})
 include(FetchContent)
 
 # Add the cmake directory to the module path.
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${APOLLO_CMAKE_ROOT})
+#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${APOLLO_CMAKE_ROOT})
 
 # Declare fetch content for all packages.
 FetchContent_Declare(
@@ -86,7 +86,7 @@ FetchContent_Declare(
     )
 
 find_package(zeus QUIET)
-find_package(Lua REQUIRED )
+#find_package(Lua REQUIRED )
 
 if (NOT zeus_FOUND AND NOT zeus_POPULATED)
     FetchContent_Populate(zeus)
@@ -149,7 +149,7 @@ endif()
 #================================
 add_library(apollo_core ${APOLLO_INCLUDE_CORE_GROUP} ${APOLLO_SOURCE_CORE_GROUP})
 target_include_directories(apollo_core PUBLIC ${APOLLO_SOURCE_ROOT})
-target_link_libraries(apollo_core PUBLIC zeus::zeus lua::lua)
+target_link_libraries(apollo_core PUBLIC zeus::zeus)
 if (NOT MSVC)
     target_link_libraries(apollo_core PUBLIC stdc++fs)
 endif()
