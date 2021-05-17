@@ -69,6 +69,9 @@ source_group("source\\core" FILES ${APOLLO_SOURCE_CORE_GROUP})
 #================================
 include(FetchContent)
 
+# Add the cmake directory to the module path.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${APOLLO_CMAKE_ROOT})
+
 # Declare fetch content for all packages.
 FetchContent_Declare(
     zeus
@@ -76,12 +79,24 @@ FetchContent_Declare(
     GIT_TAG 531afeb2f6c7ac2a7c4057c3d7278868324cc584
     )
 
+FetchContent_Declare(
+    lua
+    GIT_REPOSITORY https://github.com/marovira/lua
+    GIT_TAG cb847f204a1615ee9801874770230290517f760b
+    )
+
 find_package(zeus QUIET)
+find_package(Lua REQUIRED )
 
 if (NOT zeus_FOUND AND NOT zeus_POPULATED)
     FetchContent_Populate(zeus)
     add_subdirectory(${zeus_SOURCE_DIR} ${zeus_BINARY_DIR})
 endif()
+
+#if (NOT lua_FOUND AND NOT lua_POPULATED)
+    #FetchContent_Populate(lua)
+    #add_subdirectory(${lua_SOURCE_DIR} ${lua_BINARY_DIR})
+#endif()
 
 if (APOLLO_BUILD_PARALLEL)
     FetchContent_Declare(
@@ -91,7 +106,6 @@ if (APOLLO_BUILD_PARALLEL)
         )
 
     find_package(tbb QUIET)
-
 
     if (NOT tbb_FOUND AND NOT tbb_POPULATED)
         FetchContent_Populate(tbb)
@@ -135,7 +149,7 @@ endif()
 #================================
 add_library(apollo_core ${APOLLO_INCLUDE_CORE_GROUP} ${APOLLO_SOURCE_CORE_GROUP})
 target_include_directories(apollo_core PUBLIC ${APOLLO_SOURCE_ROOT})
-target_link_libraries(apollo_core PUBLIC zeus::zeus)
+target_link_libraries(apollo_core PUBLIC zeus::zeus lua::lua)
 if (NOT MSVC)
     target_link_libraries(apollo_core PUBLIC stdc++fs)
 endif()
