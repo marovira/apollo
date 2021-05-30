@@ -55,14 +55,6 @@ set(APOLLO_CMAKE_ROOT ${APOLLO_SOURCE_DIR}/cmake)
 #================================
 add_subdirectory(${APOLLO_SOURCE_ROOT})
 
-#================================
-# Source groups.
-#================================
-source_group("include" FILES ${APOLLO_INCLUDE_ROOT_GROUP})
-source_group("include\\core" FILES ${APOLLO_INCLUDE_CORE_GROUP})
-
-source_group("source" FILES)
-source_group("source\\core" FILES ${APOLLO_SOURCE_CORE_GROUP})
 
 #================================
 # Find Packages.
@@ -138,6 +130,9 @@ endif()
 #================================
 # Core library.
 #================================
+source_group("include" FILES ${APOLLO_INCLUDE_CORE_GROUP})
+source_group("source" FILES ${APOLLO_SOURCE_CORE_GROUP})
+
 add_library(core ${APOLLO_INCLUDE_CORE_GROUP} ${APOLLO_SOURCE_CORE_GROUP})
 target_include_directories(core PUBLIC ${APOLLO_SOURCE_ROOT})
 target_link_libraries(core PUBLIC zeus::zeus)
