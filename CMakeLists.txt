@@ -143,8 +143,18 @@ target_compile_features(core PUBLIC cxx_std_17)
 target_compile_options(core PUBLIC ${APOLLO_COMPILER_FLAGS})
 target_compile_options(core PUBLIC ${APOLLO_DEBUG_FLAGS})
 target_compile_definitions(core PUBLIC ${APOLLO_COMPILE_DEFINITIONS})
-add_library(apollo::core ALIAS core)
 set_target_properties(core PROPERTIES FOLDER "apollo")
+
+#================================
+# Shapes library.
+#================================
+source_group("include" FILES ${APOLLO_INCLUDE_SHAPES_GROUP})
+source_group("source" FILES ${APOLLO_SOURCE_SHAPES_GROUP})
+
+add_library(shapes ${APOLLO_INCLUDE_SHAPES_GROUP} ${APOLLO_SOURCE_SHAPES_GROUP})
+target_include_directories(shapes PUBLIC ${APOLLO_SOURCE_ROOT})
+target_link_libraries(shapes PUBLIC core)
+set_target_properties(shapes PROPERTIES FOLDER "apollo")
 
 #================================
 # Build the tests.
@@ -173,8 +183,17 @@ if (APOLLO_BUILD_TESTS)
     target_link_libraries(core_test PRIVATE core Catch2::Catch2)
     set_target_properties(core_test PROPERTIES FOLDER "apollo_test")
 
+    #================================
+    # Shapes tests.
+    #================================
+    source_group("source" FILES ${APOLLO_TEST_SHAPES_GROUP})
+    add_executable(shapes_test ${APOLLO_TEST_SHAPES_GROUP})
+    target_link_libraries(shapes_test PRIVATE shapes Catch2::Catch2)
+    set_target_properties(shapes_test PROPERTIES FOLDER "apollo_test")
+
     set(APOLLO_TEST_LIST
         core_test
+        shapes_test
         )
 
     include(CTest)
