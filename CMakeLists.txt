@@ -69,9 +69,6 @@ source_group("source\\core" FILES ${APOLLO_SOURCE_CORE_GROUP})
 #================================
 include(FetchContent)
 
-# Add the cmake directory to the module path.
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${APOLLO_CMAKE_ROOT})
-
 # Declare fetch content for all packages.
 FetchContent_Declare(
     zeus
@@ -86,17 +83,11 @@ FetchContent_Declare(
     )
 
 find_package(zeus QUIET)
-#find_package(Lua REQUIRED )
 
 if (NOT zeus_FOUND AND NOT zeus_POPULATED)
     FetchContent_Populate(zeus)
     add_subdirectory(${zeus_SOURCE_DIR} ${zeus_BINARY_DIR})
 endif()
-
-#if (NOT lua_FOUND AND NOT lua_POPULATED)
-    #FetchContent_Populate(lua)
-    #add_subdirectory(${lua_SOURCE_DIR} ${lua_BINARY_DIR})
-#endif()
 
 if (APOLLO_BUILD_PARALLEL)
     FetchContent_Declare(
@@ -145,20 +136,20 @@ elseif(APOLLO_REAL_TYPE STREQUAL "double")
 endif()
 
 #================================
-# Core module.
+# Core library.
 #================================
-add_library(apollo_core ${APOLLO_INCLUDE_CORE_GROUP} ${APOLLO_SOURCE_CORE_GROUP})
-target_include_directories(apollo_core PUBLIC ${APOLLO_SOURCE_ROOT})
-target_link_libraries(apollo_core PUBLIC zeus::zeus)
+add_library(core ${APOLLO_INCLUDE_CORE_GROUP} ${APOLLO_SOURCE_CORE_GROUP})
+target_include_directories(core PUBLIC ${APOLLO_SOURCE_ROOT})
+target_link_libraries(core PUBLIC zeus::zeus)
 if (NOT MSVC)
-    target_link_libraries(apollo_core PUBLIC stdc++fs)
+    target_link_libraries(core PUBLIC stdc++fs)
 endif()
-target_compile_features(apollo_core PUBLIC cxx_std_17)
-target_compile_options(apollo_core PUBLIC ${APOLLO_COMPILER_FLAGS})
-target_compile_options(apollo_core PUBLIC ${APOLLO_DEBUG_FLAGS})
-target_compile_definitions(apollo_core PUBLIC ${APOLLO_COMPILE_DEFINITIONS})
-add_library(apollo::core ALIAS apollo_core)
-set_target_properties(apollo_core PROPERTIES FOLDER "apollo")
+target_compile_features(core PUBLIC cxx_std_17)
+target_compile_options(core PUBLIC ${APOLLO_COMPILER_FLAGS})
+target_compile_options(core PUBLIC ${APOLLO_DEBUG_FLAGS})
+target_compile_definitions(core PUBLIC ${APOLLO_COMPILE_DEFINITIONS})
+add_library(apollo::core ALIAS core)
+set_target_properties(core PROPERTIES FOLDER "apollo")
 
 #================================
 # Build the tests.
@@ -179,15 +170,21 @@ if (APOLLO_BUILD_TESTS)
 
     add_subdirectory(${APOLLO_TEST_ROOT})
 
-    source_group("source" FILES ${APOLLO_TEST_TOP_GROUP})
-    source_group("source\\core" FILES ${APOLLO_TEST_CORE_GROUP})
-    add_executable(apollo_test ${APOLLO_TEST_LIST})
-    target_link_libraries(apollo_test
-        apollo_core
-        Catch2::Catch2)
-    set_target_properties(apollo_test PROPERTIES FOLDER "apollo")
+    #================================
+    # Core tests.
+    #================================
+    source_group("source" FILES ${APOLLO_TEST_CORE_GROUP})
+    add_executable(core_test ${APOLLO_TEST_CORE_GROUP})
+    target_link_libraries(core_test PRIVATE core Catch2::Catch2)
+    set_target_properties(core_test PROPERTIES FOLDER "apollo_test")
+
+    set(APOLLO_TEST_LIST
+        core_test
+        )
 
     include(CTest)
     include(Catch)
-    catch_discover_tests(apollo_test)
+    foreach(test_target ${APOLLO_TEST_LIST})
+        catch_discover_tests(${test_target})
+    endforeach()
 endif()
