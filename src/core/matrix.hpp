@@ -173,10 +173,10 @@ namespace core
     template<typename T>
     Matrix<T>& operator*=(Matrix<T>& lhs, Matrix<T> const& rhs)
     {
-        for (std::size_t i{0}; i < N; ++i)
+        for (std::size_t i{0}; i < Matrix<T>::num_rows; ++i)
         {
             auto row = lhs.row(i);
-            for (std::size_t j{0}; j < N; ++j)
+            for (std::size_t j{0}; j < Matrix<T>::num_cols; ++j)
             {
                 auto col  = rhs.col(j);
                 auto val  = dot(row, col);
@@ -250,8 +250,8 @@ namespace core
     template<typename T>
     Vector<T, 4> operator*(Matrix<T> const& lhs, Vector<T, 4> const& rhs)
     {
-        Vector<T> out;
-        for (std::size_t i{0}; i < N; ++i)
+        Vector<T, 4> out;
+        for (std::size_t i{0}; i < Matrix<T>::num_rows; ++i)
         {
             auto row = lhs.row(i);
             out[i]   = dot(row, rhs);
@@ -264,9 +264,9 @@ namespace core
     Matrix<T> transpose(Matrix<T> const& mat)
     {
         Matrix<T> out;
-        for (std::size_t i{0}; i < N; ++i)
+        for (std::size_t i{0}; i < Matrix<T>::num_rows; ++i)
         {
-            for (std::size_t j{0}; j < N; ++j)
+            for (std::size_t j{0}; j < Matrix<T>::num_cols; ++j)
             {
                 out(i, j) = mat(j, i);
             }
@@ -383,7 +383,7 @@ namespace core
     bool is_identity(Matrix<T> const& mat)
     {
         std::size_t diag_idx{0};
-        for (std::size_t i{0}; i < size; ++i)
+        for (std::size_t i{0}; i < Matrix<T>::size; ++i)
         {
             if (i == diag_idx)
             {
@@ -392,7 +392,7 @@ namespace core
                     return false;
                 }
 
-                diag_idx += num_rows + 1;
+                diag_idx += Matrix<T>::num_rows + 1;
                 continue;
             }
 
