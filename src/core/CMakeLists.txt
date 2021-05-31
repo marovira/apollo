@@ -5,6 +5,7 @@ set(APOLLO_INCLUDE_CORE_LIST
     ${APOLLO_CORE_ROOT}/utils.hpp
     ${APOLLO_CORE_ROOT}/ray.hpp
     ${APOLLO_CORE_ROOT}/real.hpp
+    ${APOLLO_CORE_ROOT}/matrix.hpp
     PARENT_SCOPE)
 
 set(APOLLO_SOURCE_CORE_LIST
