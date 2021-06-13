@@ -1,7 +1,21 @@
 #include <core/matrix.hpp>
 
 #include <catch2/catch.hpp>
+#include <zeus/compiler.hpp>
 #include <zeus/float.hpp>
+
+// There seems to be a bug in GCC where trying to pass a lambda from a
+// non-constexpr function as a template argument to a constexpr function fails
+// due to it having no linkage. We can work around this problem by moving the
+// declaration of the epsilon lambda outside and marking it as constexpr. See
+// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83258 for details.
+#if defined(ZEUS_COMPILER_GCC)
+template<typename T>
+inline constexpr T eps()
+{
+    return std::numeric_limits<T>::epsilon() * 100;
+}
+#endif
 
 TEMPLATE_TEST_CASE("[Matrix] - constructors", "[core]", float, double)
 {
@@ -470,9 +484,11 @@ TEMPLATE_TEST_CASE("[Matrix] - inverse", "[core]", float, double)
 
         auto inv = core::inverse(m);
 
+#if !defined(ZEUS_COMPILER_GCC)
         auto eps = []() {
             return std::numeric_limits<TestType>::epsilon() * 100;
         };
+#endif
 
         for (std::size_t i{0}; i < 16; ++i)
         {
