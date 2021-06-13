@@ -39,7 +39,6 @@ endif()
 
 # Make sure Zeus does not make the clang-format target and disable the
 # unit tests for it.
-set(ZEUS_CLANG_FORMAT_TARGET OFF CACHE INTERNAL "")
 set(ZEUS_BUILD_TESTS OFF CACHE INTERNAL "")
 
 #================================
@@ -54,7 +53,6 @@ set(APOLLO_CMAKE_ROOT ${APOLLO_SOURCE_DIR}/cmake)
 # Add subdirectories.
 #================================
 add_subdirectory(${APOLLO_SOURCE_ROOT})
-
 
 #================================
 # Find Packages.

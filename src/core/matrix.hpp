@@ -197,8 +197,6 @@ namespace core
     bool operator==(Matrix<T> const& lhs, Matrix<T> const& rhs)
     {
         return lhs.data == rhs.data;
-
-        return true;
     }
 
     template<typename T>
